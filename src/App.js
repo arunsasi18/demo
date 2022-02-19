@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React from "react";
+import { fire } from "./firebase/Config";
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Hello World</h1>
+      <button onClick={()=>{
+        fire.auth().createUserWithEmailAndPassword("kiran@gmail.com", "password")
+        .then((userCredential) => {
+          // Signed in 
+          var user = userCredential.user;
+           fire.firestore().collection('products').get().then((resp)=>{
+          resp.forEach((obj) => {
+            console.log(obj.data());
+          });
+        })
+          // ...
+        })
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // ..
+        });
+       
+      }}> CliclMe</button>
     </div>
   );
 }
